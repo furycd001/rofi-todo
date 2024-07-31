@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+TODO_FILE="$HOME/Documents/todo.txt"
+TEMP_FILE="/tmp/todo.txt"
+
+# Function to display the todo list and handle actions
+show_todo_list() {
+    while true; do
+        # Read the todo list
+        if [ -f "$TODO_FILE" ]; then
+            todo_list=$(<"$TODO_FILE")
+        else
+            todo_list=""
+        fi
+
+        # Use rofi to display the todo list and get the selected action
+        action=$(echo -e "Add New Item\n${todo_list}" | rofi -dmenu -i -p "Todo List")
+
+        # Check if the user pressed Escape or canceled the selection
+        if [ -z "$action" ]; then
+            break
+        elif [ "$action" == "Add New Item" ]; then
+            # Prompt for a new item
+            new_item=$(rofi -dmenu -i -p "New Todo Item")
+            if [ -n "$new_item" ]; then
+                echo "$new_item" >> "$TODO_FILE"
+            fi
+        else
+            # Confirm deletion of the selected item
+            confirm=$(echo -e "No\nYes" | rofi -dmenu -i -p "Delete '$action'?")
+            if [ "$confirm" == "Yes" ]; then
+                grep -vxF "$action" "$TODO_FILE" > "$TEMP_FILE" && mv "$TEMP_FILE" "$TODO_FILE"
+            fi
+        fi
+    done
+}
+
+# Run the todo list function
+show_todo_list
