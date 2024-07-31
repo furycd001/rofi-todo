@@ -1,7 +1,8 @@
 # Rofi todo
 
-A simple Bash script to manage a todo list using `rofi`, allowing for the adding and deletion of tasks directly from within `rofi`.
+![alt text](todo.jpg "todo girl")
 
+A simple Bash script to manage a todo list using `rofi`, allowing for the adding and deletion of tasks directly from within `rofi`.
 
 ## Features
 
